@@ -1,7 +1,5 @@
 # Exercise 0.5: Single page app diagram
 
-The normal 
-
 ```mermaid
 
 sequenceDiagram
