@@ -11,28 +11,43 @@ const Statistics = (props) => {
   return(
     <div>
       <h1>statistics</h1>
-      <History good={props.good} neutral={props.neutral} bad={props.bad} average={props.average} total={props.total} />
+      <History 
+        good={props.good} 
+        neutral={props.neutral} 
+        bad={props.bad} 
+        average={props.average} 
+        positive={props.positive}  
+        total={props.total} />
     </div>
   )
 }
 
-const History = (props) => {
-  if (props.total === 0) {
+const StatisticLine = (props) => {
+  return (
+    <>
+      <p>{props.text}: {props.value}</p>
+    </>
+
+  )
+}
+
+const History = ({good, neutral, bad, total, average, positive}) => {
+  if (total === 0) {
     return (
-      <div>
+      <>
         <p>No feedback given</p>
-      </div>
+      </>
     )
   }
   return (
-    <div>
-      <p>good: {props.good}</p>
-      <p>neutral: {props.neutral}</p>
-      <p>bad: {props.bad}</p>
-      <p>all: {props.total}</p>
-      <p>average: {props.average}</p>
-      <p>positive: {props.positive} %</p>
-    </div>
+    <>
+      <StatisticLine text="good" value = {good} />
+      <StatisticLine text="neutral" value = {neutral} />
+      <StatisticLine text="bad" value = {bad} />
+      <StatisticLine text="total" value = {total} />
+      <StatisticLine text="average" value = {average} />
+      <StatisticLine text="positive" value = {positive} />
+    </>
   )
 }
 
