@@ -1,11 +1,32 @@
 import { useState } from 'react'
 
+function DisplayAnacdote(props){
+  return (
+    <>
+      <p>{props.anecdote}</p>
+    </>
+  )
+}
 
-const Button = ({onClick, text}) => {
+function DisplayVotes(props){
   return(
-    <div>
+    <p>has {props.votes} votes</p>
+  )
+}
+
+const ButtonNextJoke = ({onClick, text}) => {
+  return(
+    <>
       <button onClick={onClick}>{text}</button>
-    </div>
+    </>
+  )
+}
+
+const ButtonVote = ({onClick, text}) => {
+  return(
+    <>
+      <button onClick={onClick}>{text}</button>
+    </>
   )
 }
 
@@ -22,6 +43,7 @@ const App = () => {
   ]
 
   const [selected, setSelected] = useState(0)
+  const [voted, setVoted] = useState(Array(anecdotes.length ).fill(0))
 
   function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
@@ -29,14 +51,23 @@ const App = () => {
     return Math.floor(Math.random() * (max - min)) + min;
   }
   
-  function handleOnClick(){
+  function handleNextJoke(){
     setSelected(getRandomIntInclusive(0, anecdotes.length))
+  }
+
+  function handleVote(){
+    const copy = [...voted]
+    copy[selected] += 1 
+    setVoted(copy)
+    console.log(copy)
   }
 
   return (
     <div>
-      {anecdotes[selected]}
-      <Button onClick={handleOnClick} text={"Next joke"} />
+      <DisplayAnacdote anecdote={anecdotes[selected]}/>
+      <DisplayVotes onClick={handleVote} votes={voted[selected]}/>
+      <ButtonVote onClick={handleVote} text={"vote"} />
+      <ButtonNextJoke onClick={handleNextJoke} text={"Next joke"} />
     </div>
   )
 }
