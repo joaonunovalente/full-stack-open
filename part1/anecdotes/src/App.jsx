@@ -3,6 +3,7 @@ import { useState } from 'react'
 function DisplayAnacdote(props){
   return (
     <>
+    <h1>Anacdote of the day</h1>
       <p>{props.anecdote}</p>
     </>
   )
@@ -30,6 +31,16 @@ const ButtonVote = ({onClick, text}) => {
   )
 }
 
+const AnacdoteMostVotes = ({anacdote, votes}) => {
+  return(
+    <div>
+      <h1>Anacdote with most votes</h1>
+      <p>{anacdote}</p>
+      <p>has {votes} votes</p>
+    </div>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -53,13 +64,20 @@ const App = () => {
   
   function handleNextJoke(){
     setSelected(getRandomIntInclusive(0, anecdotes.length))
+    getAnacdoteWithMostVotes()
   }
 
   function handleVote(){
     const copy = [...voted]
     copy[selected] += 1 
     setVoted(copy)
-    console.log(copy)
+    getAnacdoteWithMostVotes()
+  }
+
+  function getAnacdoteWithMostVotes(){
+    let anacdote = Math.max(...voted)
+    let id = voted.indexOf(Math.max(...voted))
+    return [anacdote, anecdotes[id]]
   }
 
   return (
@@ -68,6 +86,7 @@ const App = () => {
       <DisplayVotes onClick={handleVote} votes={voted[selected]}/>
       <ButtonVote onClick={handleVote} text={"vote"} />
       <ButtonNextJoke onClick={handleNextJoke} text={"Next joke"} />
+      <AnacdoteMostVotes anacdote={getAnacdoteWithMostVotes()[1]} votes={getAnacdoteWithMostVotes()[0]}/>
     </div>
   )
 }
