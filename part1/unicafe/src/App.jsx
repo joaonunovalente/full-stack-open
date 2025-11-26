@@ -98,7 +98,7 @@ const App = () => {
   }
 
   const computePositive = () => {
-    positive = good * 100/ (good + neutral + bad)
+    positive = good * 100 / (good + neutral + bad)
     return positive 
   }
 
@@ -112,5 +112,6 @@ const App = () => {
     </div>
   )
 }
+
 
 export default App
