@@ -29,9 +29,9 @@ const Part = ({parts}) => {
 
 const Total = ({parts}) => {
   return(
-    <>
+    <p>
       <b>total of {getTotalNumberOfExercises(parts)} exercises</b>
-    </>
+    </p>
   )
 }
 
