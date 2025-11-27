@@ -10,14 +10,20 @@ const App = () => {
   const addName = (event) => {
     event.preventDefault()
 
-    const personObject = {
-      name: newName,
-      important: Math.random() < 0.5,
-      id: persons.length + 1,
-    }
+    if (preventRepeatName()){
+      alert(`${newName} is already added to phonebook`)
 
-    setPersons(persons.concat(personObject))
-    setNewName('')
+    }
+    else {
+      const personObject = {
+        name: newName,
+        important: Math.random() < 0.5,
+        id: persons.length + 1,
+      }
+
+      setPersons(persons.concat(personObject))
+      setNewName('')
+    }
   }
 
   const handleNameChange = (event) => {
@@ -27,6 +33,17 @@ const App = () => {
   const namesToShow = showAll
     ? persons
     : persons.filter(person => person.important)
+
+
+  // Callback function. It receives array[i] element
+  // It return true or false
+  function fun(person){
+    return person.name === newName
+  }
+
+  const preventRepeatName = () => {
+    return persons.some(fun)    
+  }
 
   return (
     <div>
