@@ -1,11 +1,19 @@
 import { useState } from 'react'
 
-const Name = ({ name, phone }) => <p>{name} {phone} </p>
+const Name = ({ name, number }) => <p>{name} {number} </p>
 
 const App = () => {
-  const [persons, setPersons] = useState([]) 
+  // const [persons, setPersons] = useState([]) 
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
+  ])
+
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState([])
+  const [newSearch, setNewSearch] = useState('')
   const [showAll, setShowAll] = useState(true)
  
   const addName = (event) => {
@@ -18,8 +26,7 @@ const App = () => {
     else {
       const personObject = {
         name: newName,
-        phone: newPhone,
-        important: Math.random() < 0.5,
+        number: newPhone,
         id: persons.length + 1,
       }
 
@@ -36,44 +43,63 @@ const App = () => {
     setNewPhone(event.target.value)
   }
 
-  const namesToShow = showAll
-    ? persons
-    : persons.filter(person => person.important)
+  const handleSearch = (event) => {
+    setNewSearch(event.target.value)
+  }
 
+  function funNamesToShow(person){
+    return person.name.toLowerCase().includes(newSearch.toLowerCase())
+  }
+  const namesToShow = persons.filter(funNamesToShow)
 
   // Callback function. It receives array[i] element
   // It return true or false
-  function fun(person){
+  function funPreventRepeatName(person){
     return person.name === newName
   }
 
   const preventRepeatName = () => {
-    return persons.some(fun)    
+    return persons.some(funPreventRepeatName)    
   }
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <div>
+        Filter shown with: 
+        <input 
+            value={newSearch} 
+            onChange={handleSearch}
+        />
+      </div>
+      
+      <h2>Add an entry</h2>
       <form onSubmit={addName}>
         <div>
-          name: <input 
+          name: 
+          <input 
             value={newName}
             onChange={handleNameChange}
           />
         </div>
-        <div>number: <input value={newPhone} onChange={handlePhoneChange} /></div>
+        <br></br>
         <div>
-          <button type="submit">add</button>
+          number: 
+          <input value={newPhone} onChange={handlePhoneChange} />
+        </div>
+        <br></br>
+        <div>
+          <button type="submit">
+            Add entry
+          </button>
         </div>
       </form>
-
-      <h2>Names</h2>
+      <h2>Name and Number</h2>
       {namesToShow.map(person =>
-        <Name key={person.id} name={person.name} phone={person.phone}/>
+        <Name key={person.id} name={person.name} number={person.number}/>
       )}
     </div>
   )
 }
-
 
 export default App
