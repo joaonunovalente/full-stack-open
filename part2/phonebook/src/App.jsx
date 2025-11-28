@@ -1,10 +1,11 @@
 import { useState } from 'react'
 
-const Name = ({ name }) => <p>{name}</p>
+const Name = ({ name, phone }) => <p>{name} {phone} </p>
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
+  const [newPhone, setNewPhone] = useState([])
   const [showAll, setShowAll] = useState(true)
  
   const addName = (event) => {
@@ -17,6 +18,7 @@ const App = () => {
     else {
       const personObject = {
         name: newName,
+        phone: newPhone,
         important: Math.random() < 0.5,
         id: persons.length + 1,
       }
@@ -28,6 +30,10 @@ const App = () => {
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
+  }
+  
+  const handlePhoneChange = (event) => {
+    setNewPhone(event.target.value)
   }
 
   const namesToShow = showAll
@@ -55,6 +61,7 @@ const App = () => {
             onChange={handleNameChange}
           />
         </div>
+        <div>number: <input value={newPhone} onChange={handlePhoneChange} /></div>
         <div>
           <button type="submit">add</button>
         </div>
@@ -62,7 +69,7 @@ const App = () => {
 
       <h2>Names</h2>
       {namesToShow.map(person =>
-        <Name key={person.id} name={person.name} />
+        <Name key={person.id} name={person.name} phone={person.phone}/>
       )}
     </div>
   )
