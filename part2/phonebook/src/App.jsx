@@ -1,22 +1,23 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Name = ({ name, number }) => <p>{name} {number} </p>
 
-const Filter = ({newSearch, handleSearch}) => {
-  return(
+const Filter = ({ newSearch, handleSearch }) => {
+  return (
     <div>
-      Filter shown with: <input value={newSearch} onChange={handleSearch}/>
+      Filter shown with: <input value={newSearch} onChange={handleSearch} />
     </div>
   )
 }
 
-const Persons = ({namesToShow}) => namesToShow.map(person => <Name key={person.id} name={person.name} number={person.number}/>)
+const Persons = ({ namesToShow }) => namesToShow.map(person => <Name key={person.id} name={person.name} number={person.number} />)
 
-const PersonForm = ({addName, newName, newPhone, handleNameChange, handlePhoneChange}) => {
-  return(
+const PersonForm = ({ addName, newName, newPhone, handleNameChange, handlePhoneChange }) => {
+  return (
     <form onSubmit={addName}>
       <div>
-        name: <input value={newName} onChange={handleNameChange}/>
+        name: <input value={newName} onChange={handleNameChange} />
       </div>
       <br></br>
       <div>
@@ -31,23 +32,25 @@ const PersonForm = ({addName, newName, newPhone, handleNameChange, handlePhoneCh
 }
 
 const App = () => {
-  // const [persons, setPersons] = useState([]) 
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ])
+  const [persons, setPersons] = useState([])
+  useEffect(() => {
+    console.log('effect')
+    axios.get('http://localhost:3001/persons').then(response => {
+      console.log('promise fulfilled')
+      setPersons(response.data)
+    })
+  }, [])
+  console.log('render', persons.length, 'persons')
 
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [newSearch, setNewSearch] = useState('')
   const [showAll, setShowAll] = useState(true)
- 
+
   const addName = (event) => {
     event.preventDefault()
 
-    if (preventRepeatName()){
+    if (preventRepeatName()) {
       alert(`${newName} is already added to phonebook`)
       return
     }
@@ -67,7 +70,7 @@ const App = () => {
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
-  
+
   const handlePhoneChange = (event) => {
     setNewPhone(event.target.value)
   }
@@ -76,31 +79,31 @@ const App = () => {
     setNewSearch(event.target.value)
   }
 
-  function funNamesToShow(person){
+  function funNamesToShow(person) {
     return person.name.toLowerCase().includes(newSearch.toLowerCase())
   }
   const namesToShow = persons.filter(funNamesToShow)
 
   // Callback function. It receives array[i] element
   // It return true or false
-  function funPreventRepeatName(person){
+  function funPreventRepeatName(person) {
     return person.name === newName
   }
 
   const preventRepeatName = () => {
-    return persons.some(funPreventRepeatName)    
+    return persons.some(funPreventRepeatName)
   }
 
   return (
     <div>
       <h1>Phonebook</h1>
-      <Filter newSearch={newSearch} handleSearch={handleSearch}/>
+      <Filter newSearch={newSearch} handleSearch={handleSearch} />
       <h2>Add an entry</h2>
-      <PersonForm 
-        addName={addName} 
-        newName={newName} 
-        newPhone={newPhone} 
-        handleNameChange={handleNameChange} 
+      <PersonForm
+        addName={addName}
+        newName={newName}
+        newPhone={newPhone}
+        handleNameChange={handleNameChange}
         handlePhoneChange={handlePhoneChange}
       />
       <h2>Name and Number</h2>
