@@ -35,11 +35,14 @@ const App = () => {
   const [persons, setPersons] = useState([])
   useEffect(() => {
     console.log('effect')
-    axios.get('http://localhost:3001/persons').then(response => {
-      console.log('promise fulfilled')
-      setPersons(response.data)
-    })
+    axios.
+      get('http://localhost:3001/persons').
+      then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      })
   }, [])
+
   console.log('render', persons.length, 'persons')
 
   const [newName, setNewName] = useState('')
@@ -61,9 +64,13 @@ const App = () => {
         id: persons.length + 1,
       }
 
-      setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewPhone('')
+      axios
+        .post('http://localhost:3001/persons', personObject)
+        .then(response => {
+          setPersons(persons.concat(personObject))
+          setNewName('')
+          setNewPhone('')
+        })
     }
   }
 
