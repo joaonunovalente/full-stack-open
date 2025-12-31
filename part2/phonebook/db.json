@@ -26,19 +26,24 @@
       "number": "987-654-321"
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "Valente",
       "number": "123-456-789"
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "João Nuno",
       "number": "111-222-333"
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "Another user",
       "number": "987-555-444"
+    },
+    {
+      "id": 9,
+      "name": "Maria",
+      "number": "935-100-456"
     }
   ]
 }

@@ -1,37 +1,11 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
-
-
-
-const Name = ({ name, number }) => <p>{name} {number} </p>
-
-const Filter = ({ newSearch, handleSearch }) => {
-  return (
-    <div>
-      Filter shown with: <input value={newSearch} onChange={handleSearch} />
-    </div>
-  )
-}
+import PersonForm from './components/PersonForm'
+import Name from './components/Name'
+import Filter from './components/Filter'
 
 const Persons = ({ namesToShow }) => namesToShow.map(person => <Name key={person.id} name={person.name} number={person.number} />)
 
-const PersonForm = ({ addName, newName, newPhone, handleNameChange, handlePhoneChange }) => {
-  return (
-    <form onSubmit={addName}>
-      <div>
-        name: <input value={newName} onChange={handleNameChange} />
-      </div>
-      <br></br>
-      <div>
-        number: <input value={newPhone} onChange={handlePhoneChange} />
-      </div>
-      <br></br>
-      <div>
-        <button type="submit">Add entry</button>
-      </div>
-    </form>
-  )
-}
 
 const App = () => {
   const [persons, setPersons] = useState([])
