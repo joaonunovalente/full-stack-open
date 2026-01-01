@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 import PersonForm from './components/PersonForm'
-import Name from './components/Name'
 import Filter from './components/Filter'
 
-const Persons = ({ namesToShow }) => namesToShow.map(person => <Name key={person.id} name={person.name} number={person.number} />)
+const Persons = ({ namesToShow, handleDeletePerson }) => namesToShow.map(person => <Name key={person.id} id={person.id} name={person.name} number={person.number} handleDeletePerson={handleDeletePerson} />)
 
+const Name = ({ id, name, number, handleDeletePerson }) => {
+  return (
+    <p>{name} {number} <button onClick={() => { handleDeletePerson(id) }}>Delete</button> </p>
+
+  )
+}
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -36,7 +41,7 @@ const App = () => {
       const personObject = {
         name: newName,
         number: newPhone,
-        id: persons.length + 1,
+        id: String(persons.length + 1),
       }
 
       personService
@@ -46,6 +51,19 @@ const App = () => {
           setNewName('')
           setNewPhone('')
         })
+    }
+  }
+
+  function handleDeletePerson(id) {
+    if (window.confirm("Do you want to delete a person?")) {
+      personService.deletePerson(id);
+      personService
+        .getAll()
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id));
+        })
+    } else {
+      log.innerText = "Glad you didn't.";
     }
   }
 
@@ -64,6 +82,7 @@ const App = () => {
   function funNamesToShow(person) {
     return person.name.toLowerCase().includes(newSearch.toLowerCase())
   }
+
   const namesToShow = persons.filter(funNamesToShow)
 
   // Callback function. It receives array[i] element
@@ -88,8 +107,9 @@ const App = () => {
         handleNameChange={handleNameChange}
         handlePhoneChange={handlePhoneChange}
       />
+      <br />
       <h2>Name and Number</h2>
-      <Persons namesToShow={namesToShow} />
+      <Persons namesToShow={namesToShow} handleDeletePerson={handleDeletePerson} />
     </div>
   )
 }
