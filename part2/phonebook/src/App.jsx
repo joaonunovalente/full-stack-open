@@ -7,7 +7,7 @@ const Persons = ({ namesToShow, handleDeletePerson }) => namesToShow.map(person 
 
 const Name = ({ id, name, number, handleDeletePerson }) => {
   return (
-    <p>{name} {number} <button onClick={() => { handleDeletePerson(id) }}>Delete</button> </p>
+    <p>{name}: {number} <button onClick={() => { handleDeletePerson(id) }}>Delete</button> </p>
 
   )
 }
@@ -34,9 +34,30 @@ const App = () => {
     event.preventDefault()
 
     if (preventRepeatName()) {
-      alert(`${newName} is already added to phonebook`)
-      return
+      if (window.confirm(`${newName} is already added to phonebook. Do you want replace the old number with the new one?`)) {
+        const existingPerson = persons.find(person => person.name === newName)
+
+        const personObject = {
+          name: newName,
+          number: newPhone,
+          id: existingPerson.id
+        }
+
+        personService
+          .update(personObject.id, personObject)
+          .then(response => {
+            setPersons(
+              persons.map(p =>
+                p.id !== existingPerson.id ? p : response.data
+              )
+            )
+          })
+
+      } else {
+        return
+      }
     }
+
     else {
       const personObject = {
         name: newName,
