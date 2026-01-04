@@ -1,72 +1,86 @@
-import axios from 'axios'
-import { useState, useEffect } from 'react'
-import SearchCountry from './components/SearchCountry'
-import ShowCountries from './components/ShowCountries'
+import { useState, useEffect } from 'react';
+import SearchCountry from './components/SearchCountry';
+import ShowCountries from './components/ShowCountries';
+import CountriesService from './services/CountriesService'
 
 function App() {
   // State variables
-  const [input, setInput] = useState("")
-  const [countries, setCountries] = useState([])
-  const [filteredCountries, setFilteredCountries] = useState([])
-  const [oneCountry, setOneCountry] = useState(null)
-  console.log("Rendering")
+  const [input, setInput] = useState("");
+  const [countries, setCountries] = useState([]);
+  const [filteredCountries, setFilteredCountries] = useState([]);
+  const [oneCountry, setOneCountry] = useState(null);
 
-  // Effect that fetch the API data
+  // --------------
+
+  // Fetch all countries data on component mount
   useEffect(() => {
-    const url_base = 'https://studies.cs.helsinki.fi/restcountries/api/all'
-    axios
-      .get(url_base)
-      .then(getCountiesList)
-  }, [])
+    CountriesService
+      .getCountries()
+      .then(getCountriesList)
+      .catch((error) => {
+        console.error("Error fetching countries:", error);
+      });
+  }, []);
 
-  function getCountiesList(response) {
-    const list = []
-    const data = response.data
-    for (let i = 0; i < data.length; i++) {
-      list.push(data[i].name.common)
-    }
-    setCountries(list)
+  /**
+   * Extracts the common names of all countries from the API response.
+   * @param {Object} response - Axios response object.
+   */
+  function getCountriesList(response) {
+    const countryNames = response.data.map(country => country.name.common);
+    setCountries(countryNames);
   }
 
-  // Filter countries according to the input value
-  useEffect(() => filterCountries(), [input])
+  // --------------
 
+  // Filter countries whenever the input changes
+  useEffect(() => {
+    filterCountries();
+  }, [input, countries]);
+
+  /**
+   * Filters the countries list based on the current input value.
+   */
   function filterCountries() {
-    const list = countries.filter(checkCountries)
-    setFilteredCountries(list)
+    const filteredList = countries.filter(country =>
+      country.toLowerCase().includes(input.toLowerCase())
+    );
+    setFilteredCountries(filteredList);
   }
 
-  function checkCountries(country) {
-    return country.toLowerCase().includes(input.toLowerCase())
-  }
+  // --------------
 
-  // Busca dados detalhados de um país quando só há um país filtrado
+  // Fetch detailed data for a single country when only one match is found
   useEffect(() => {
     if (filteredCountries.length === 1) {
       const countryName = filteredCountries[0];
-      const url = `https://studies.cs.helsinki.fi/restcountries/api/name/${countryName}`;
-      axios
-        .get(url)
+      CountriesService
+        .getCountry(countryName)
         .then(getCountryData)
         .catch((error) => {
-          console.error("Error: no country found", error);
+          console.error("Error fetching country details:", error);
         });
+    } else {
+      // Clear detailed country data if there are zero or multiple matches
+      setOneCountry(null);
     }
   }, [filteredCountries]);
 
+  /**
+   * Sets the detailed country data in state.
+   * @param {Object} response - Axios response object.
+   */
   function getCountryData(response) {
-    const data = response.data
-    setOneCountry(data)
-    console.log(data)
+    const data = response.data;
+    setOneCountry(data);
   }
-
 
   return (
     <>
       <SearchCountry input={input} setInput={setInput} />
       <ShowCountries filteredCountries={filteredCountries} oneCountry={oneCountry} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
