@@ -54,6 +54,7 @@ function App() {
   useEffect(() => {
     if (filteredCountries.length === 1) {
       const countryName = filteredCountries[0];
+      console.log(countryName)
       CountriesService
         .getCountry(countryName)
         .then(getCountryData)

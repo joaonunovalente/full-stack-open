@@ -5,8 +5,8 @@ function getCountries(){
     return axios.get(base_url+"all")
 }
 
-function getCountry({country}){
-    return axios.get(base_url+{country})
+function getCountry(country){
+    return axios.get(`${base_url}name/${country}`)
 }
 
 export default {
