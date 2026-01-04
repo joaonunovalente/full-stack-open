@@ -79,7 +79,7 @@ function App() {
   return (
     <>
       <SearchCountry input={input} setInput={setInput} />
-      <ShowCountries filteredCountries={filteredCountries} oneCountry={oneCountry} />
+      <ShowCountries setInput={setInput} filteredCountries={filteredCountries} oneCountry={oneCountry} />
     </>
   );
 }

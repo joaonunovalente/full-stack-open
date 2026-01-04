@@ -4,7 +4,20 @@
  * Displays a list of countries or detailed information about a single country,
  * depending on the number of filtered results.
  */
-const ShowCountries = ({ filteredCountries, oneCountry }) => {
+
+const ShowButton = ({setInput, country}) =>{
+  console.log("button")
+
+  function handleShowButton(){
+    setInput(country)
+  }
+
+  return (
+    <button onClick={handleShowButton}>Show</button>
+  )
+} 
+
+const ShowCountries = ({setInput, filteredCountries, oneCountry }) => {
   // If only one country matches, show detailed information
   if (filteredCountries.length === 1 && oneCountry) {
     // Convert the 'languages' object into an array of language names
@@ -45,8 +58,10 @@ const ShowCountries = ({ filteredCountries, oneCountry }) => {
   return (
     <div>
       {filteredCountries.map((country, index) => (
-        <p key={index}>{country.name?.common || country}</p>
+        <p key={index}>{country} <ShowButton setInput={setInput} country={country} /></p>
+        
       ))}
+      
     </div>
   );
 };
