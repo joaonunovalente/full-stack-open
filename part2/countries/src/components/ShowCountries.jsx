@@ -5,11 +5,11 @@
  * depending on the number of filtered results.
  */
 
-const ShowButton = ({setInput, country}) =>{
+const ShowButton = ({setFilteredCountries, country}) =>{
   console.log("button")
 
   function handleShowButton(){
-    setInput(country)
+    setFilteredCountries([country])    
   }
 
   return (
@@ -17,7 +17,9 @@ const ShowButton = ({setInput, country}) =>{
   )
 } 
 
-const ShowCountries = ({setInput, filteredCountries, oneCountry }) => {
+const ShowCountries = ({setFilteredCountries, filteredCountries, oneCountry }) => {
+
+
   // If only one country matches, show detailed information
   if (filteredCountries.length === 1 && oneCountry) {
     // Convert the 'languages' object into an array of language names
@@ -41,6 +43,9 @@ const ShowCountries = ({setInput, filteredCountries, oneCountry }) => {
           alt={`Flag of ${oneCountry.name.common}`}
           style={{ maxWidth: '200px', border: '1px solid #ddd' }}
         />
+
+        <h2>Weather in {oneCountry.name.common}</h2>
+        <p>Temperature {5.7} Celsius</p>
       </div>
     );
   }
@@ -58,10 +63,11 @@ const ShowCountries = ({setInput, filteredCountries, oneCountry }) => {
   return (
     <div>
       {filteredCountries.map((country, index) => (
-        <p key={index}>{country} <ShowButton setInput={setInput} country={country} /></p>
-        
+        <p key={index}>
+          {country}&nbsp;  
+          <ShowButton setFilteredCountries={setFilteredCountries} country={country}/>
+        </p>
       ))}
-      
     </div>
   );
 };

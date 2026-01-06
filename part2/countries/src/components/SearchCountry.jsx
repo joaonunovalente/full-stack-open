@@ -9,7 +9,7 @@ const SearchCountry = ({ input, setInput }) => {
   return (
     <div>
       <p>
-        Find countries:
+        Find countries:&nbsp;
         <input
           type="text"
           value={input}
