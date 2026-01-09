@@ -17,9 +17,7 @@ const ShowButton = ({setFilteredCountries, country}) =>{
   )
 } 
 
-const ShowCountries = ({setFilteredCountries, filteredCountries, oneCountry }) => {
-
-
+const ShowCountries = ({setFilteredCountries, filteredCountries, oneCountry, weatherData }) => {
   // If only one country matches, show detailed information
   if (filteredCountries.length === 1 && oneCountry) {
     // Convert the 'languages' object into an array of language names
@@ -42,10 +40,14 @@ const ShowCountries = ({setFilteredCountries, filteredCountries, oneCountry }) =
           src={oneCountry.flags.png}
           alt={`Flag of ${oneCountry.name.common}`}
           style={{ maxWidth: '200px', border: '1px solid #ddd' }}
-        />
+          />
 
         <h2>Weather in {oneCountry.name.common}</h2>
-        <p>Temperature {5.7} Celsius</p>
+        <p>Temperature is {weatherData[0]}º Celsius</p>
+        <img 
+          src={`https://openweathermap.org/img/wn/${weatherData[1]}@2x.png`}
+          />
+        <p>Wind is {weatherData[2]} m/s</p>
       </div>
     );
   }

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import SearchCountry from './components/SearchCountry';
 import ShowCountries from './components/ShowCountries';
 import CountriesService from './services/CountriesService'
+import TemperatureService from './services/TemperatureService';
 
 function App() {
   // State variables
@@ -9,6 +10,8 @@ function App() {
   const [countries, setCountries] = useState([]);
   const [filteredCountries, setFilteredCountries] = useState([]);
   const [oneCountry, setOneCountry] = useState(null);
+  const [weatherData, setWeatherData] = useState([]);
+
 
   // --------------
 
@@ -76,10 +79,37 @@ function App() {
     setOneCountry(data);
   }
 
+  // ----------------
+
+  // Fetch detailed data for the temperature of the country
+  useEffect(() => {
+    if (filteredCountries.length === 1) {
+      const countryName = filteredCountries[0];
+      console.log(countryName + ' Temperature')
+      TemperatureService
+        .get(countryName)
+        .then(getWeatherData)
+        .catch((error) => {
+          console.error("Error fetching country details:", error);
+        });
+    } else {
+      // Clear detailed country data if there are zero or multiple matches
+      setOneCountry(null);
+    }
+  }, [filteredCountries]);
+
+  function getWeatherData(response) {
+    
+    const temperature = response.data.main.temp
+    const icon = response.data.weather[0].icon
+    const wind = response.data.wind.speed
+    setWeatherData([temperature, icon, wind])
+  }
+
   return (
     <>
       <SearchCountry input={input} setInput={setInput} />
-      <ShowCountries setFilteredCountries={setFilteredCountries} filteredCountries={filteredCountries} oneCountry={oneCountry} />
+      <ShowCountries setFilteredCountries={setFilteredCountries} filteredCountries={filteredCountries} oneCountry={oneCountry} weatherData={weatherData} />
     </>
   );
 }
