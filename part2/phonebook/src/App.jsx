@@ -1,152 +1,78 @@
-import { useState, useEffect } from 'react'
-import Filter from './components/Filter'
-import Notification from './components/Notification'
-import PersonForm from './components/PersonForm'
-import personService from './services/persons'
-
-
-const Persons = ({ namesToShow, handleDeletePerson }) => namesToShow.map(person => <Name key={person.id} id={person.id} name={person.name} number={person.number} handleDeletePerson={handleDeletePerson} />)
-
-const Name = ({ id, name, number, handleDeletePerson }) => {
-  return (
-    <p>{name}: {number} <button onClick={() => { handleDeletePerson(id) }}>Delete</button> </p>
-
-  )
-}
+import { useState, useEffect } from 'react';
 
 const App = () => {
-  const [persons, setPersons] = useState([])
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
+  ]);
+  const [newName, setNewName] = useState('');
+  const [newNumber, setNewNumber] = useState('');
+  const [personsToShow, setPersonsToShow] = useState(persons);
+
   useEffect(() => {
-    console.log('effect')
-    personService
-      .getAll()
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
-  }, [])
+    setPersonsToShow(persons);
+  }, [persons]);
 
-  console.log('render', persons.length, 'persons')
-
-  const [newName, setNewName] = useState('')
-  const [newPhone, setNewPhone] = useState('')
-  const [newSearch, setNewSearch] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
-
-  const addName = (event) => {
-    event.preventDefault()
-
-    if (preventRepeatName()) {
-      if (window.confirm(`${newName} is already added to phonebook. Do you want replace the old number with the new one?`)) {
-        const existingPerson = persons.find(person => person.name === newName)
-
-        const personObject = {
-          name: newName,
-          number: newPhone,
-          id: existingPerson.id
-        }
-
-        personService
-          .update(personObject.id, personObject)
-          .then(response => {
-            setPersons(
-              persons.map(p =>
-                p.id !== existingPerson.id ? p : response.data
-              )
-            )
-            setErrorMessage(
-              `${personObject.name}'s number was changed.`
-            )
-            setTimeout(() => {
-              setErrorMessage(null)
-            }, 5000)
-          })
-
-      } else {
-        return
-      }
-    }
-
-    else {
+  const addPersonForm = (event) => {
+    event.preventDefault();
+    if (persons.some(item => item.name === newName)) {
+      alert(`${newName} is already added to the phonebook`);
+    } else {
       const personObject = {
         name: newName,
-        number: newPhone,
-        id: String(persons.length + 1),
-      }
-
-      personService
-        .create(personObject)
-        .then(response => {
-          setPersons(persons.concat(personObject))
-          setNewName('')
-          setNewPhone('')
-          setErrorMessage(`${personObject.name} was added to the list.`)
-          setTimeout(() => {
-            setErrorMessage(null)
-          }, 5000)
-        })
+        number: newNumber,
+        id: persons.length > 0 ? Math.max(...persons.map(p => p.id)) + 1 : 1
+      };
+      setPersons(persons.concat(personObject));
+      setNewName('');
+      setNewNumber('');
     }
-  }
-
-  function handleDeletePerson(id) {
-    if (window.confirm("Do you want to delete a person?")) {
-      personService.deletePerson(id);
-      personService
-        .getAll()
-        .then(() => {
-          setPersons(persons.filter(person => person.id !== id));
-        })
-    } else {
-      log.innerText = "Glad you didn't.";
-    }
-  }
+  };
 
   const handleNameChange = (event) => {
-    setNewName(event.target.value)
-  }
+    setNewName(event.target.value);
+  };
 
-  const handlePhoneChange = (event) => {
-    setNewPhone(event.target.value)
-  }
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value);
+  };
 
-  const handleSearch = (event) => {
-    setNewSearch(event.target.value)
-  }
-
-  function funNamesToShow(person) {
-    return person.name.toLowerCase().includes(newSearch.toLowerCase())
-  }
-
-  const namesToShow = persons.filter(funNamesToShow)
-
-  // Callback function. It receives array[i] element
-  // It return true or false
-  function funPreventRepeatName(person) {
-    return person.name === newName
-  }
-
-  const preventRepeatName = () => {
-    return persons.some(funPreventRepeatName)
-  }
+  const handleFilterNameChange = (event) => {
+    const value = event.target.value;
+    const filtered = persons.filter(person =>
+      person.name.toLowerCase().includes(value.toLowerCase())
+    );
+    setPersonsToShow(filtered);
+  };
 
   return (
     <div>
-      <h1>Phonebook</h1>
-      <Notification errorMessage={errorMessage} />
-      <Filter newSearch={newSearch} handleSearch={handleSearch} />
-      <h2>Add an entry</h2>
-      <PersonForm
-        addName={addName}
-        newName={newName}
-        newPhone={newPhone}
-        handleNameChange={handleNameChange}
-        handlePhoneChange={handlePhoneChange}
-      />
-      <br />
-      <h2>Name and Number</h2>
-      <Persons namesToShow={namesToShow} handleDeletePerson={handleDeletePerson} />
+      <h2>Phonebook</h2>
+      <div>
+        Filter shown with: <input onChange={handleFilterNameChange} />
+      </div>
+      <h3>Add a new</h3>
+      <form onSubmit={addPersonForm}>
+        <div>
+          name: <input value={newName} onChange={handleNameChange} />
+        </div>
+        <div>
+          number: <input value={newNumber} onChange={handleNumberChange} />
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+      </form>
+      <h2>Numbers</h2>
+      <ul>
+        {personsToShow.map(person =>
+          <li key={person.id}>{person.name}: {person.number}</li>
+        )}
+      </ul>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
