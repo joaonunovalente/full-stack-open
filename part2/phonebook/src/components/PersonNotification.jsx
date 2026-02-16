@@ -1,11 +1,7 @@
 const PersonNotification = ({ message }) => {
-  if (message === null) {
-    return
 
-  }
-
-  return (
-    <div className="note">
+  return message === null ? null : (
+    <div className="notification-message">
       <label>{message}</label>
     </div>
   );

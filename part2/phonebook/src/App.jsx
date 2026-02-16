@@ -1,5 +1,6 @@
 import { useState, useEffect, use } from "react";
 import personService from "./services/personService";
+import ErrorNotification from "./components/ErrorNotification";
 import FilterNameInput from "./components/FilterNameInput";
 import PersonForm from "./components/PersonForm";
 import PersonNotification from "./components/PersonNotification";
@@ -11,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [personsToShow, setPersonsToShow] = useState(persons);
   const [notificationMessage, setNotificationMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     setPersonsToShow(persons);
@@ -89,7 +91,19 @@ const App = () => {
     if (window.confirm(`Do you want to delete the record of ${name}?`)) {
       personService
         .remove(id)
-        .then(setPersons(persons.filter((person) => person.id != id)));
+        .then(() => {
+          console.log("Showing people again...");
+          setPersons(persons.filter((person) => person.id != id));
+        })
+        .catch((error) => {
+          setErrorMessage(`${name} was already removed from the server.`);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000)
+        
+        setPersons(persons.filter(n => n.id !== id))
+        }
+      );
     } else {
       console.log("No person was delete");
     }
@@ -115,6 +129,7 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
       <PersonNotification message={notificationMessage} />
+      <ErrorNotification message={errorMessage} />
       <FilterNameInput handleFilterNameChange={handleFilterNameChange} />
       <h2>Add a new person</h2>
       <PersonForm
