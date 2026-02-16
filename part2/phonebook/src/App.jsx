@@ -16,12 +16,10 @@ const App = () => {
 
   useEffect(() => {
     console.log("The hook Axios is here...");
-    axios
-      .get("http://localhost:3001/persons")
-      .then((response) => {
-        console.log("promise fulfilled");
-        setPersons(response.data);
-      })
+    axios.get("http://localhost:3001/persons").then((response) => {
+      console.log("promise fulfilled");
+      setPersons(response.data);
+    });
   }, []);
 
   const addPersonForm = (event) => {
@@ -32,11 +30,17 @@ const App = () => {
       const personObject = {
         name: newName,
         number: newNumber,
-        id: persons.length > 0 ? Math.max(...persons.map((p) => p.id)) + 1 : 1,
+        id: String(
+          persons.length > 0 ? Math.max(...persons.map((p) => p.id)) + 1 : 1,
+        ),
       };
       setPersons(persons.concat(personObject));
       setNewName("");
       setNewNumber("");
+
+      axios
+        .post("http://localhost:3001/persons", personObject)
+        .then(() => console.log("The POST method to create a new person..."));
     }
   };
 
