@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import personService from "./services/personService";
 import FilterNameInput from "./components/FilterNameInput";
 import PersonForm from "./components/PersonForm";
 import ShowPersons from "./components/ShowPersons";
@@ -16,9 +16,9 @@ const App = () => {
 
   useEffect(() => {
     console.log("The hook Axios is here...");
-    axios.get("http://localhost:3001/persons").then((response) => {
-      console.log("promise fulfilled");
-      setPersons(response.data);
+    personService.getAll().then((initialPersons) => {
+      console.log("getAll persons promise fulfilled");
+      setPersons(initialPersons);
     });
   }, []);
 
@@ -38,8 +38,8 @@ const App = () => {
       setNewName("");
       setNewNumber("");
 
-      axios
-        .post("http://localhost:3001/persons", personObject)
+      personService
+        .create(personObject)
         .then(() => console.log("The POST method to create a new person..."));
     }
   };
