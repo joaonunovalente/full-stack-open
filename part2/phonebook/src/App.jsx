@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import personService from "./services/personService";
 import FilterNameInput from "./components/FilterNameInput";
 import PersonForm from "./components/PersonForm";
+import PersonNotification from "./components/PersonNotification";
 import ShowPersons from "./components/ShowPersons";
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [personsToShow, setPersonsToShow] = useState(persons);
+  const [notificationMessage, setNotificationMessage] = useState(null);
 
   useEffect(() => {
     setPersonsToShow(persons);
@@ -40,17 +42,23 @@ const App = () => {
           id: oldPersonObject.id,
         };
 
-        personService.update(personObject.id, personObject).then(() =>
-          setPersons(
-            persons.map((person) => {
-              if (person.id === personObject.id) {
-                return personObject;
-              } else {
-                return person;
-              }
-            }),
-          ),
-        );
+        personService
+          .update(personObject.id, personObject)
+          .then(() =>
+            setPersons(
+              persons.map((person) =>
+                person.id === personObject.id ? personObject : person,
+              ),
+            ),
+          )
+          .then(() => {
+            setNotificationMessage(
+              `'${personObject.name}'s number was updated!`,
+            );
+            setTimeout(() => {
+              setNotificationMessage(null);
+            }, 5000);
+          });
       } else {
         console.log("No person was delete");
       }
@@ -66,9 +74,12 @@ const App = () => {
       setNewName("");
       setNewNumber("");
 
-      personService
-        .create(personObject)
-        .then(() => console.log("The POST method to create a new person..."));
+      personService.create(personObject).then(() => {
+        setNotificationMessage(`'${personObject.name}' was added!`);
+        setTimeout(() => {
+          setNotificationMessage(null);
+        }, 5000);
+      });
     }
   };
 
@@ -102,9 +113,10 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <PersonNotification message={notificationMessage} />
       <FilterNameInput handleFilterNameChange={handleFilterNameChange} />
-      <h3>Add a new person</h3>
+      <h2>Add a new person</h2>
       <PersonForm
         addPersonForm={addPersonForm}
         newName={newName}
