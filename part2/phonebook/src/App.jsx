@@ -25,7 +25,35 @@ const App = () => {
   const addPersonForm = (event) => {
     event.preventDefault();
     if (persons.some((item) => item.name === newName)) {
-      alert(`${newName} is already added to the phonebook`);
+      if (
+        window.confirm(
+          `${newName} is already added to the phonebook. Do you want to replace the old number with a new one?`,
+        )
+      ) {
+        const oldPersonObject = persons.find(
+          (person) => person.name === newName,
+        );
+
+        const personObject = {
+          name: oldPersonObject.name,
+          number: newNumber,
+          id: oldPersonObject.id,
+        };
+
+        personService.update(personObject.id, personObject).then(() =>
+          setPersons(
+            persons.map((person) => {
+              if (person.id === personObject.id) {
+                return personObject;
+              } else {
+                return person;
+              }
+            }),
+          ),
+        );
+      } else {
+        console.log("No person was delete");
+      }
     } else {
       const personObject = {
         name: newName,
