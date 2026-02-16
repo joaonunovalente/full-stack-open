@@ -10,6 +10,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [personsToShow, setPersonsToShow] = useState(persons);
 
+
+
   useEffect(() => {
     setPersonsToShow(persons);
   }, [persons]);
@@ -20,6 +22,7 @@ const App = () => {
       console.log("getAll persons promise fulfilled");
       setPersons(initialPersons);
     });
+
   }, []);
 
   const addPersonForm = (event) => {
@@ -43,6 +46,11 @@ const App = () => {
         .then(() => console.log("The POST method to create a new person..."));
     }
   };
+
+  const removePerson = (id) => {
+    console.log("Button clicked...")
+    personService.remove(id)
+  }
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
@@ -73,7 +81,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Persons and Numbers</h2>
-      <ShowPersons personsToShow={personsToShow} />
+      <ShowPersons personsToShow={personsToShow} removePerson={removePerson} />
     </div>
   );
 };
