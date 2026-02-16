@@ -10,8 +10,6 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [personsToShow, setPersonsToShow] = useState(persons);
 
-
-
   useEffect(() => {
     setPersonsToShow(persons);
   }, [persons]);
@@ -22,7 +20,6 @@ const App = () => {
       console.log("getAll persons promise fulfilled");
       setPersons(initialPersons);
     });
-
   }, []);
 
   const addPersonForm = (event) => {
@@ -47,10 +44,17 @@ const App = () => {
     }
   };
 
-  const removePerson = (id) => {
-    console.log("Button clicked...")
-    personService.remove(id)
-  }
+  const removePerson = (name, id) => {
+    console.log("Button clicked to remove person...");
+
+    if (window.confirm(`Do you want to delete the record of ${name}?`)) {
+      personService
+        .remove(id)
+        .then(setPersons(persons.filter((person) => person.id != id)));
+    } else {
+      console.log("No person was delete");
+    }
+  };
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
