@@ -51,8 +51,6 @@ app.get("/api/persons/:id", (request, response) => {
     ? response.json(note)
     : response.status(404).end()
   
-  
-  
   console.log("- - - DEBUG - - - Person id =", id)
 })
 
