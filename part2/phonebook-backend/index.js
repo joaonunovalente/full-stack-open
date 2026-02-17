@@ -30,6 +30,7 @@ app.get("/api/persons", (request, response) => {
 
 app.get("/info", (request, response) => {
   console.log("Here lays the info...");
+
   let number_of_notes = notes.length;
   let currentDate = new Date().toString();
 
@@ -40,11 +41,20 @@ app.get("/info", (request, response) => {
         ${currentDate}
     </p>
     `;
-
-  console.log(message);
-
   response.send(message);
 });
+
+app.get("/api/persons/:id", (request, response) => {
+  const id = request.params.id
+  const note = notes.find((note) => note.id === id)
+  note
+    ? response.json(note)
+    : response.status(404).end()
+  
+  
+  
+  console.log("- - - DEBUG - - - Person id =", id)
+})
 
 const PORT = 3001;
 app.listen(PORT, () => {
