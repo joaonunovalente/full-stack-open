@@ -72,16 +72,24 @@ const App = () => {
           persons.length > 0 ? Math.max(...persons.map((p) => p.id)) + 1 : 1,
         ),
       };
-      setPersons(persons.concat(personObject));
-      setNewName("");
-      setNewNumber("");
 
-      personService.create(personObject).then(() => {
-        setNotificationMessage(`'${personObject.name}' was added!`);
-        setTimeout(() => {
-          setNotificationMessage(null);
-        }, 5000);
-      });
+      personService
+        .create(personObject)
+        .then(() => {
+          setPersons(persons.concat(personObject));
+          setNewName("");
+          setNewNumber("");
+          setNotificationMessage(`'${personObject.name}' was added!`);
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
+        })
+        .catch((error) => {
+          setErrorMessage(`${error.response.data.error}`);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000);
+        });
     }
   };
 
@@ -99,11 +107,10 @@ const App = () => {
           setErrorMessage(`${name} was already removed from the server.`);
           setTimeout(() => {
             setErrorMessage(null);
-          }, 5000)
-        
-        setPersons(persons.filter(n => n.id !== id))
-        }
-      );
+          }, 5000);
+
+          setPersons(persons.filter((n) => n.id !== id));
+        });
     } else {
       console.log("No person was delete");
     }
@@ -127,7 +134,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Phonebook</h1>
+      <h1>Phonebook -Database</h1>
       <PersonNotification message={notificationMessage} />
       <ErrorNotification message={errorMessage} />
       <FilterNameInput handleFilterNameChange={handleFilterNameChange} />
