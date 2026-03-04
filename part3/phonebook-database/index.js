@@ -8,6 +8,16 @@ const app = express();
 app.use(express.json());
 app.use(express.static("dist"));
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
 morgan.token("body", (req) => {
   return JSON.stringify(req.body);
 });
@@ -46,12 +56,13 @@ app.get("/api/persons/:id", (request, response) => {
   console.log("- - - DEBUG - - - Person id =", id);
 });
 
-app.delete("/api/persons/:id", (request, response) => {
+app.delete("/api/persons/:id", (request, response, next) => {
   const id = request.params.id;
   Person.findByIdAndDelete(id)
   .then((result) => {
     response.status(204).end();
   })
+  .catch(error => next(error))
 });
 
 app.post("/api/persons", (request, response) => {
@@ -85,6 +96,14 @@ app.post("/api/persons", (request, response) => {
     response.json(savedPerson);
   });
 });
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+app.use(errorHandler)
+
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
