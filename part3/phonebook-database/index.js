@@ -55,34 +55,33 @@ app.delete("/api/persons/:id", (request, response) => {
 app.post("/api/persons", (request, response) => {
   const body = request.body;
 
-  console.log(
-    "- - - DEBUG - - -",
-    persons.find((person) => person.name === body.name),
-  );
+  // console.log(
+  //   "- - - DEBUG - - -",
+  //   persons.find((person) => person.name === body.name),
+  // );
 
-  if (!body.name) {
-    return response.status(400).json({
-      error: "Name is  missing",
-    });
-  } else if (!body.number) {
-    return response.status(400).json({
-      error: "Number is  missing",
-    });
-  } else if (persons.find((person) => person.name === body.name)) {
-    return response.status(400).json({
-      error: "The name already exists in the phonebook",
-    });
-  }
+  // if (!body.name) {
+  //   return response.status(400).json({
+  //     error: "Name is  missing",
+  //   });
+  // } else if (!body.number) {
+  //   return response.status(400).json({
+  //     error: "Number is  missing",
+  //   });
+  // } else if (persons.find((person) => person.name === body.name)) {
+  //   return response.status(400).json({
+  //     error: "The name already exists in the phonebook",
+  //   });
+  // }
 
-  const person = {
-    id: String(Math.floor(Math.random() * 100_000)),
+  const person = new Person({
     name: body.name,
     number: body.number || "",
-  };
+  });
 
-  persons = persons.concat(person);
-
-  response.json(persons);
+  person.save().then((savedPerson) => {
+    response.json(savedPerson);
+  });
 });
 
 const PORT = process.env.PORT || 3001;
