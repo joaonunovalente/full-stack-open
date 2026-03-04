@@ -35,25 +35,28 @@ app.get("/api/persons", (request, response) => {
 app.get("/info", (request, response) => {
   console.log("Here lays the info...");
 
-  let number_of_persons = persons.length;
-  let currentDate = new Date().toString();
+  Person.find({}).then((persons) => {
+    number_of_persons = persons.length;
 
-  let message = `
+    let currentDate = new Date().toString();
+
+    let message = `
     <p>
         Phonebook has info for ${number_of_persons} people
         <br><br>
         ${currentDate}
     </p>
     `;
-  response.send(message);
+    response.send(message);
+  });
 });
 
 app.get("/api/persons/:id", (request, response) => {
   const id = request.params.id;
-  const note = persons.find((note) => note.id === id);
-  note ? response.json(note) : response.status(404).end();
-
-  console.log("- - - DEBUG - - - Person id =", id);
+  Person.findById(id).then((person) => {
+    person ? response.json(person) : response.status(404).end();
+    console.log("- - - DEBUG - - - Person id =", id);
+  });
 });
 
 app.delete("/api/persons/:id", (request, response, next) => {
@@ -67,25 +70,6 @@ app.delete("/api/persons/:id", (request, response, next) => {
 
 app.post("/api/persons", (request, response) => {
   const body = request.body;
-
-  // console.log(
-  //   "- - - DEBUG - - -",
-  //   persons.find((person) => person.name === body.name),
-  // );
-
-  // if (!body.name) {
-  //   return response.status(400).json({
-  //     error: "Name is  missing",
-  //   });
-  // } else if (!body.number) {
-  //   return response.status(400).json({
-  //     error: "Number is  missing",
-  //   });
-  // } else if (persons.find((person) => person.name === body.name)) {
-  //   return response.status(400).json({
-  //     error: "The name already exists in the phonebook",
-  //   });
-  // }
 
   const person = new Person({
     name: body.name,
@@ -101,21 +85,20 @@ app.put("/api/persons/:id", (request, response, next) => {
   const id = request.params.id;
   const { name, number } = request.body;
 
-  Person.findById(id)
-    .then((person) => {
-      if (!person) {
-        return response.status(404).end()
-      }
-      
-      person.name = name;
-      person.number = number;
+  Person.findById(id).then((person) => {
+    if (!person) {
+      return response.status(404).end();
+    }
 
-      return person
-        .save()
-        .then((updatedPerson) => {
-          response.json(updatedPerson);
-        })
-    .catch((error) => next(error));
+    person.name = name;
+    person.number = number;
+
+    return person
+      .save()
+      .then((updatedPerson) => {
+        response.json(updatedPerson);
+      })
+      .catch((error) => next(error));
   });
 });
 
