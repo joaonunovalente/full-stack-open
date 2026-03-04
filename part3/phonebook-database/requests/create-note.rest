@@ -2,24 +2,26 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name" : "Valente",
-    "number" : "123-456-789"
+  "name": "Valente",
+  "number": "123"
 }
+
 
 ###
 POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name" : "Arto Hellas",
-    "number" : "123-456-789"
+  "name": "Arto Hellas",
+  "number": "123-456-789"
 }
+
 
 ###
 POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name" : "Test",
-    "number" : "123"
+  "name": "Test",
+  "number": "123"
 }
