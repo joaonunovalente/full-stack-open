@@ -1,6 +1,6 @@
 # Blog list
 
-## Exercise 4.1
+## Exercise 4.1 - Blog List, step 1
 
 Create a index.js file.
 
@@ -56,3 +56,7 @@ The gitignore file has the following ignored folder:
 ```bash
 /node_modules
 ```
+
+## Exercise 4.2 - Blog List, step 2
+
+1. Install dotenv and add the variables PORT and MONGODB_URI to it.
