@@ -1,0 +1,33 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "The Hobbit",
+  "author": "J.R.R. Tolkien",
+  "url": "https://the-hobbit.com",
+  "likes": 15
+}
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "1984",
+  "author": "George Orwell",
+  "url": "https://1984.com",
+  "likes": 22
+}
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "To Kill a Mockingbird",
+  "author": "Harper Lee",
+  "url": "https://to-kill-a.mockingbird.com",
+  "likes": 18
+}
