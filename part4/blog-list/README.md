@@ -61,6 +61,15 @@ The gitignore file has the following ignored folder:
 
 ## Exercise 4.2 - Blog List, step 2
 
+### .gitignore
+
+Add .env to .gitignore.
+
+```bash
+/node_modules
+.env
+```
+
 ### Environmental Variables
 
 1. Install dotenv.
@@ -78,11 +87,6 @@ PORT=3003
 
 3. Create **config.js** in _utils_ folder
 
-### .gitignore
+### Schema
 
-Add .env to .gitignore.
-
-```bash
-/node_modules
-.env
-```
+Refactor the code into _./models/blog_.
