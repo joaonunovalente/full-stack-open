@@ -42,7 +42,6 @@ mongodb+srv://<username>:<password>@<username>.2k5dikm.mongodb.net/bloglistApp?r
 
 I use the config file from the previous exercise.
 
-
 ```bash
 npm install eslint @eslint/js --save-dev
 npm install globals --save-dev
@@ -57,6 +56,33 @@ The gitignore file has the following ignored folder:
 /node_modules
 ```
 
+
+
+
 ## Exercise 4.2 - Blog List, step 2
 
-1. Install dotenv and add the variables PORT and MONGODB_URI to it.
+### Environmental Variables
+
+1. Install dotenv.
+
+```bash
+npm install dotenv
+```
+
+2. Make .env file and add the variables PORT and MONGODB_URI to it.
+
+```bash
+MONGODB_URI=mongodb://localhost/bloglist
+PORT=3003
+```
+
+3. Create **config.js** in _utils_ folder
+
+### .gitignore
+
+Add .env to .gitignore.
+
+```bash
+/node_modules
+.env
+```
