@@ -90,3 +90,7 @@ PORT=3003
 ### Schema
 
 Refactor the code into _./models/blog_.
+
+### app
+
+Create _app.js_ and refactor _index.js_.
