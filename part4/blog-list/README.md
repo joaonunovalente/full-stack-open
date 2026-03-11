@@ -94,3 +94,8 @@ Refactor the code into _./models/blog_.
 ### app
 
 Create _app.js_ and refactor _index.js_.
+
+### Router
+
+Create a _blogs.js_ in a folder called _controllers_ to control the paths requests.
+
