@@ -95,3 +95,7 @@ Create _app.js_ and refactor _index.js_.
 ### Router
 
 Create a _blogs.js_ in a folder called _controllers_ to control the paths requests.
+
+## Exercise 4.3: Helper Functions and Unit Tests, step 1
+
+Add *dummy.test.js* and *list_helper* files and changed the *package.json* to include `"test": "node --test"`.
