@@ -103,3 +103,30 @@ Add *dummy.test.js* and *list_helper* files and changed the *package.json* to in
 ## Exercise 4.4: Helper Functions and Unit Tests, step 2
 
 `totalLikes()` function was created with the 3 tests that passed: .
+
+## Exercise 4.6: Helper Functions and Unit Tests, step 4
+
+I installed Lodash.
+
+```
+npm i --save lodash
+```
+
+I imported it via `var _ = require('lodash');`.
+
+`mostBlogs()` function was created and I used ChatGPT to create the funtion. Iniatially it outputed:
+
+```
+["J.R.R. Tolkien", 2]
+```
+
+I then put the result in a dictionary.
+
+```
+const [author, number_of_blogs] = result
+return {
+  'author': author,
+  'blogs': number_of_blogs
+}
+```
+
