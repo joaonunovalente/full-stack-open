@@ -114,7 +114,7 @@ npm i --save lodash
 
 I imported it via `var _ = require('lodash');`.
 
-`mostBlogs()` function was created and I used ChatGPT to create the funtion. Iniatially it outputed:
+`mostBlogs()` function was created and I used ChatGPT to it. Iniatially it outputed:
 
 ```
 ["J.R.R. Tolkien", 2]
@@ -129,4 +129,8 @@ return {
   'blogs': number_of_blogs
 }
 ```
+
+## Exercise 4.7: Helper Functions and Unit Tests, step 5
+
+Same as the previous exercise.
 
