@@ -134,3 +134,34 @@ return {
 
 Same as the previous exercise.
 
+```
+> blog-list@1.0.0 test
+> node --test
+
+▶ dummy
+  ✔ 'dummy' returns one. (1.132126ms)
+✔ dummy (2.691888ms)
+▶ Favorite blog:
+  ✔ returns the blog with most likes (2.46246ms)
+✔ Favorite blog: (4.31047ms)
+▶ Most blogs:
+  ✔ returns the blog top author and its number of blogs (3.824234ms)
+✔ Most blogs: (5.55688ms)
+▶ Most likes:
+  ✔ returns the author whose blog posts have the largest amount of likes (3.098279ms)
+✔ Most likes: (4.655561ms)
+▶ Total likes:
+  ✔ of empty list is zero (0.97047ms)
+  ✔ when list has only one blog, equals the likes of that (0.196543ms)
+  ✔ of a bigger list is calculated right (0.256423ms)
+✔ Total likes: (3.071798ms)
+ℹ tests 7
+ℹ suites 5
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 157.479338
+
+```
