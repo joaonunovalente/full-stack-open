@@ -165,3 +165,10 @@ Same as the previous exercise.
 ℹ duration_ms 157.479338
 
 ```
+
+
+## 4.8: Blog List Tests, step 1
+
+I created a ``blog_api.test.js`` file.
+
+I also created a callback function to understand how promises work. Then I created and asynchronous async/await thing.

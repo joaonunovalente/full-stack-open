@@ -2,11 +2,12 @@ const notesRouter = require('express').Router()
 const Blog = require('../models/blog')
 
 
-notesRouter.get('/', (request, response) => {
-  Blog.find({}).then((blogs) => {
-    response.json(blogs)
-  })
-})
+async function callback(request, response) {
+  const blogs = await Blog.find({})
+  response.json(blogs)
+}
+
+notesRouter.get('/', callback)
 
 notesRouter.post('/', (request, response) => {
   const blog = new Blog(request.body)

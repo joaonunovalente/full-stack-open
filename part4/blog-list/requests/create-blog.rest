@@ -28,6 +28,6 @@ Content-Type: application/json
 {
   "title": "To Kill a Mockingbird",
   "author": "Harper Lee",
-  "url": "https://to-kill-a.mockingbird.com",
+  "url": "https://to-kill-a-mockingbird.com",
   "likes": 18
 }
